@@ -4,22 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimalsResponse {
-    private UUID id;
+public class AnimalResponse {
+    private UUID animalId;
     private String animalName;
     private String animalAge;
-    private Double animalWeight;
+    private BigDecimal animalWeight;
+    private String animalNumAge;
     private String animalSex;
     private String animalColor;
     private String animalSpecies;
     private String animalVaccines;
-    private String animalSized;
+    private String animalSize;
     private Boolean animalNeutered;
     private String animalSpecialConditions;
     private String animalCategory;

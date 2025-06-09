@@ -1,20 +1,21 @@
-package com.example.amigo_de_patas.models;
+package com.example.amigo_de_patas.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.security.Timestamp;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="animals")
-public class Animals {
+@Table(name="animal")
+public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID animalId;
 
     @Column(nullable = false, length = 100)
     private String animalName;
@@ -23,7 +24,7 @@ public class Animals {
     private String animalAge;
 
     @Column(nullable = false)
-    private Double animalWeight;
+    private BigDecimal animalWeight;
 
     @Column(nullable = false, length = 100)
     private String animalNumAge;
@@ -41,7 +42,7 @@ public class Animals {
     private String animalVaccines;
 
     @Column(length = 50)
-    private String animalSized;
+    private String animalSize;
 
     @Column
     private Boolean animalNeutered;
@@ -59,7 +60,7 @@ public class Animals {
     private Boolean animalAdopted = false;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "adopter_id")
     private Adopter adopter;
 
     @CreationTimestamp

@@ -1,28 +1,30 @@
-package com.example.amido_de_patas.dto.request;
+package com.example.amigo_de_patas.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimalsCreateRequest {
+public class AnimalUpdateRequest {
 
-    @NotBlank(message = "Animal name is mandatory")
     @Size(max = 100, message = "Name must be up to 100 characters")
     private String animalName;
 
-    @NotBlank(message = "Animal age is mandatory")
     @Size(max = 50, message = "Age description too long")
     private String animalAge;
 
-    @NotNull(message = "Weight is mandatory")
-    @Positive(message = "Weight must be positive")
-    private Double animalWeight;
+    @Positive(message = "Weight must be a positive value")
+    private BigDecimal animalWeight;
 
-    @NotBlank(message = "Sex is mandatory")
+    @NotBlank(message = "Animal number age is mandatory")
+    @Size(max = 100, message = "Animal number age too long")
+    private String animalNumAge;
+
     @Size(max = 10, message = "Sex must be up to 10 characters")
     private String animalSex;
 
@@ -32,22 +34,22 @@ public class AnimalsCreateRequest {
     @Size(max = 50, message = "Species too long")
     private String animalSpecies;
 
-    @Size(max = 255, message = "Vaccines info too long")
+    @Size(max = 255, message = "Vaccines info too long (max 255 characters)")
     private String animalVaccines;
 
     @Size(max = 50, message = "Size too long")
-    private String animalSized;
+    private String animalSize;
 
     private Boolean animalNeutered;
 
-    @Size(max = 255, message = "Conditions info too long")
+    @Size(max = 255, message = "Special conditions info too long (max 255 characters)")
     private String animalSpecialConditions;
 
-    @NotBlank(message = "Category is mandatory")
     @Size(max = 100, message = "Category too long")
     private String animalCategory;
 
-    @NotBlank(message = "Image URL is mandatory")
-    @Size(max = 255, message = "URL too long")
+    @Size(max = 255, message = "Image URL too long (max 255 characters)")
     private String animalImageUrl;
+
+    private Boolean animalAdopted;
 }
