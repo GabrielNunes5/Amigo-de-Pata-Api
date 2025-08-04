@@ -81,7 +81,6 @@ class AnimalServiceTest {
     @Test
     void shouldReturnAllAnimals() {
         List<Animal> animals = List.of(animal);
-        List<AnimalResponse> responses = List.of(animalResponse);
 
         when(animalRepository.findAll()).thenReturn(animals);
         when(animalMapper.toResponse(animal)).thenReturn(animalResponse);
