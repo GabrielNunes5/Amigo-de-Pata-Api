@@ -1,4 +1,4 @@
-package com.example.amigo_de_patas.http.controller;
+package com.example.amigo_de_patas.controller;
 
 import com.example.amigo_de_patas.dto.request.AnimalCreateRequest;
 import com.example.amigo_de_patas.dto.request.AnimalUpdateRequest;
@@ -45,7 +45,7 @@ public class AnimalController {
             @PathVariable UUID animalId,
             @RequestBody @Valid AnimalUpdateRequest request) {
         AnimalResponse updated = animalService.updateAnimal(animalId, request);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
     }
 
     @DeleteMapping("/{animalId}")

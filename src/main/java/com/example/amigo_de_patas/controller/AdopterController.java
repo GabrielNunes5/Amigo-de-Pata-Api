@@ -1,4 +1,4 @@
-package com.example.amigo_de_patas.http.controller;
+package com.example.amigo_de_patas.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

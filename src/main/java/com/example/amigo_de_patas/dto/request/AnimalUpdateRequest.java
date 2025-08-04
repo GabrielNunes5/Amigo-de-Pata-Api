@@ -21,7 +21,6 @@ public class AnimalUpdateRequest {
     @Positive(message = "Weight must be a positive value")
     private BigDecimal animalWeight;
 
-    @NotBlank(message = "Animal number age is mandatory")
     @Size(max = 100, message = "Animal number age too long")
     private String animalNumAge;
 
