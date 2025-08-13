@@ -22,10 +22,6 @@ public class AnimalCreateRequest {
     @Positive(message = "Weight must be positive")
     private BigDecimal animalWeight;
 
-    @NotBlank(message = "Animal number age is mandatory")
-    @Size(max = 100, message = "Animal number age too long")
-    private String animalNumAge;
-
     @NotBlank(message = "Sex is mandatory")
     @Size(max = 10, message = "Sex must be up to 10 characters")
     private String animalSex;
@@ -46,10 +42,6 @@ public class AnimalCreateRequest {
 
     @Size(max = 255, message = "Conditions info too long")
     private String animalSpecialConditions;
-
-    @NotBlank(message = "Category is mandatory")
-    @Size(max = 100, message = "Category too long")
-    private String animalCategory;
 
     @NotBlank(message = "Image URL is mandatory")
     @Size(max = 255, message = "URL too long")

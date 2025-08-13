@@ -22,7 +22,6 @@ public class AnimalController {
 
     @PostMapping
     public ResponseEntity<AnimalResponse> createAnimal(@Valid @RequestBody AnimalCreateRequest request) {
-        System.out.println("Received request: " + request);
         AnimalResponse response = animalService.createAnimal(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

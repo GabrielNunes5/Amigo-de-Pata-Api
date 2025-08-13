@@ -2,8 +2,13 @@ package com.example.amigo_de_patas.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
 
@@ -19,8 +24,12 @@ public class Adopter {
     @Column(nullable = false, length = 100)
     private String adopterFullName;
 
+    @Past
     @Column(nullable = false)
-    private Integer adopterAge;
+    private LocalDate adopterBirthDate;
+
+    @Column(nullable = false, unique = true, length = 11)
+    private String adopterCPF;
 
     @Column(nullable = false, unique = true, length = 100)
     private String adopterEmail;
@@ -31,42 +40,12 @@ public class Adopter {
     @Column(nullable = false, length = 200)
     private String adopterAddress;
 
-    @Column(nullable = false, length = 50)
-    private String adopterResidenceType;
-
-    @Column
-    private Boolean adopterHasGarden = false;
-
-    @Column(length = 100)
-    private String adopterOtherPets;
-
-    @Column(nullable = false, length = 100)
-    private String adopterPetType;
-
-    @Column(length = 100)
-    private String adopterPetPreference;
-
-    @Column(nullable = false, length = 100)
-    private String adopterOccupation;
-
-    @Column(nullable = false, length = 50)
-    private String adopterWorkHours;
-
-    @Column(nullable = false)
-    private Double adopterIncome;
-
-    @Column(nullable = false)
-    private String adopterAdoptionReason;
-
-    @Column(nullable = false)
-    private String adopterCommitmentToCare;
-
-    @Column
-    private String adopterExperienceWithPets;
-
-    @Column
-    private String adopterAdditionalInfo;
-
     @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Animal> adoptedAnimals;
+
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 }

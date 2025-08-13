@@ -26,9 +26,6 @@ public class Animal {
     @Column(nullable = false)
     private BigDecimal animalWeight;
 
-    @Column(nullable = false, length = 100)
-    private String animalNumAge;
-
     @Column(nullable = false, length = 10)
     private String animalSex;
 
@@ -49,9 +46,6 @@ public class Animal {
 
     @Column
     private String animalSpecialConditions;
-
-    @Column(nullable = false, length = 100)
-    private String animalCategory;
 
     @Column(nullable = false)
     private String animalImageUrl;

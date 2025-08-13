@@ -49,9 +49,8 @@ class AnimalServiceTest {
         createRequest.setAnimalName("Bidu");
         createRequest.setAnimalAge("Jovem");
         createRequest.setAnimalWeight(BigDecimal.valueOf(2.0));
-        createRequest.setAnimalNumAge("1 Ano");
         createRequest.setAnimalSex("Male");
-        createRequest.setAnimalCategory("Dog");
+        createRequest.setAnimalSpecies("Dog");
         createRequest.setAnimalImageUrl("http://example.com/images/bidu.jpg");
 
         animalResponse = new AnimalResponse();
@@ -59,9 +58,8 @@ class AnimalServiceTest {
         animalResponse.setAnimalName("Bidu");
         animalResponse.setAnimalAge("Jovem");
         animalResponse.setAnimalWeight(BigDecimal.valueOf(2.0));
-        animalResponse.setAnimalNumAge("1 Ano");
         animalResponse.setAnimalSex("Male");
-        animalResponse.setAnimalCategory("Dog");
+        animalResponse.setAnimalSpecies("Dog");
         animalResponse.setAnimalImageUrl("http://example.com/images/bidu.jpg");
     }
 

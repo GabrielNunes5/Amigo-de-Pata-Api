@@ -16,7 +16,6 @@ public class AnimalResponse {
     private String animalName;
     private String animalAge;
     private BigDecimal animalWeight;
-    private String animalNumAge;
     private String animalSex;
     private String animalColor;
     private String animalSpecies;
@@ -24,7 +23,6 @@ public class AnimalResponse {
     private String animalSize;
     private Boolean animalNeutered;
     private String animalSpecialConditions;
-    private String animalCategory;
     private String animalImageUrl;
     private Boolean animalAdopted;
     private LocalDateTime createdAt;

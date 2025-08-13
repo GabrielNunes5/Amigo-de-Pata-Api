@@ -22,22 +22,16 @@ class AnimalRepositoryTest {
     @Test
     @DisplayName("Deve salvar e buscar todos os animais")
     void shouldSaveAndFindAllAnimals() {
-        // Arrange
         Animal animal = new Animal();
         animal.setAnimalName("Rex");
         animal.setAnimalAge("Jovem");
         animal.setAnimalWeight(BigDecimal.valueOf(18.5));
-        animal.setAnimalNumAge("1 Ano");
         animal.setAnimalSex("Macho");
-        animal.setAnimalCategory("Dog");
         animal.setAnimalImageUrl("https://exemplo.com/imagem.jpg");
-
         animalRepository.save(animal);
 
-        // Act
         List<Animal> animals = animalRepository.findAll();
 
-        // Assert
         assertFalse(animals.isEmpty());
         assertEquals("Rex", animals.getFirst().getAnimalName());
     }
@@ -45,23 +39,19 @@ class AnimalRepositoryTest {
     @Test
     @DisplayName("Deve salvar e buscar por ID")
     void shouldSaveAndFindById() {
-        // Arrange
         Animal animal = new Animal();
         animal.setAnimalName("Mia");
         animal.setAnimalAge("Jovem");
         animal.setAnimalWeight(BigDecimal.valueOf(4.0));
-        animal.setAnimalNumAge("1 Ano");
         animal.setAnimalSex("Fêmea");
-        animal.setAnimalCategory("Gato");
+        animal.setAnimalSpecies("Gato");
         animal.setAnimalImageUrl("https://exemplo.com/imagem.jpg");
 
         Animal saved = animalRepository.save(animal);
         UUID id = saved.getAnimalId();
 
-        // Act
         Optional<Animal> found = animalRepository.findById(id);
 
-        // Assert
         assertTrue(found.isPresent());
         assertEquals("Mia", found.get().getAnimalName());
     }

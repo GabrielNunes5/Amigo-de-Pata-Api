@@ -21,9 +21,6 @@ public class AnimalUpdateRequest {
     @Positive(message = "Weight must be a positive value")
     private BigDecimal animalWeight;
 
-    @Size(max = 100, message = "Animal number age too long")
-    private String animalNumAge;
-
     @Size(max = 10, message = "Sex must be up to 10 characters")
     private String animalSex;
 
@@ -43,9 +40,6 @@ public class AnimalUpdateRequest {
 
     @Size(max = 255, message = "Special conditions info too long (max 255 characters)")
     private String animalSpecialConditions;
-
-    @Size(max = 100, message = "Category too long")
-    private String animalCategory;
 
     @Size(max = 255, message = "Image URL too long (max 255 characters)")
     private String animalImageUrl;
