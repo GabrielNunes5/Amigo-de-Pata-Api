@@ -12,36 +12,36 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class AnimalUpdateRequest {
 
-    @Size(max = 100, message = "Name must be up to 100 characters")
+    @Size(max = 100, message = "O nome deve ter no máximo 150 caracteres")
     private String animalName;
 
-    @Size(max = 50, message = "Age description too long")
+    @Size(max = 50, message = "A idade deve ter no máximo 50 caracteres")
     private String animalAge;
 
-    @Positive(message = "Weight must be a positive value")
+    @Positive(message = "O peso deve ser positivo")
     private BigDecimal animalWeight;
 
-    @Size(max = 10, message = "Sex must be up to 10 characters")
+    @Size(max = 10, message = "O sexo deve ter no máximo 10 caracteres")
     private String animalSex;
 
-    @Size(max = 50, message = "Color too long")
+    @Size(max = 50, message = "A cor deve ter no máximo 50 caracteres")
     private String animalColor;
 
-    @Size(max = 50, message = "Species too long")
+    @Size(max = 50, message = "A espécie deve ter no máximo 50 caracteres")
     private String animalSpecies;
 
-    @Size(max = 255, message = "Vaccines info too long (max 255 characters)")
+    @Size(max = 255, message = "As vacinas devem ter no máximo 255 caracteres")
     private String animalVaccines;
 
-    @Size(max = 50, message = "Size too long")
+    @Size(max = 50, message = "O tamanho deve ter no máximo 50 caracteres")
     private String animalSize;
 
     private Boolean animalNeutered;
 
-    @Size(max = 255, message = "Special conditions info too long (max 255 characters)")
+    @Size(max = 255, message = "A condições devem ter no máximo 255 caracteres")
     private String animalSpecialConditions;
 
-    @Size(max = 255, message = "Image URL too long (max 255 characters)")
+    @Size(max = 255, message = "A URL da imagem deve ter no máximo 255 caracteres")
     private String animalImageUrl;
 
     private Boolean animalAdopted;

@@ -10,40 +10,40 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class AnimalCreateRequest {
 
-    @NotBlank(message = "Animal name is mandatory")
-    @Size(max = 100, message = "Name must be up to 100 characters")
+    @NotBlank(message = "O nome é obrigatório")
+    @Size(max = 100, message = "O nome deve ter no máximo 150 caracteres")
     private String animalName;
 
-    @NotBlank(message = "Animal age is mandatory")
-    @Size(max = 50, message = "Age description too long")
+    @NotBlank(message = "A idade é obrigatório")
+    @Size(max = 50, message = "A idade deve ter no máximo 50 caracteres")
     private String animalAge;
 
-    @NotNull(message = "Weight is mandatory")
-    @Positive(message = "Weight must be positive")
+    @NotNull(message = "O peso obrigatório")
+    @Positive(message = "O peso deve ser positivo")
     private BigDecimal animalWeight;
 
-    @NotBlank(message = "Sex is mandatory")
-    @Size(max = 10, message = "Sex must be up to 10 characters")
+    @NotBlank(message = "O sexo é obrigatório")
+    @Size(max = 10, message = "O sexo deve ter no máximo 10 caracteres")
     private String animalSex;
 
-    @Size(max = 50, message = "Color too long")
+    @Size(max = 50, message = "A cor deve ter no máximo 50 caracteres")
     private String animalColor;
 
-    @Size(max = 50, message = "Species too long")
+    @Size(max = 50, message = "A espécie deve ter no máximo 50 caracteres")
     private String animalSpecies;
 
-    @Size(max = 255, message = "Vaccines info too long")
+    @Size(max = 255, message = "As vacinas devem ter no máximo 255 caracteres")
     private String animalVaccines;
 
-    @Size(max = 50, message = "Size too long")
+    @Size(max = 50, message = "O tamanho deve ter no máximo 50 caracteres")
     private String animalSize;
 
     private Boolean animalNeutered;
 
-    @Size(max = 255, message = "Conditions info too long")
+    @Size(max = 255, message = "A condições devem ter no máximo 255 caracteres")
     private String animalSpecialConditions;
 
-    @NotBlank(message = "Image URL is mandatory")
-    @Size(max = 255, message = "URL too long")
+    @NotBlank(message = "A imagem é obrigatória")
+    @Size(max = 255, message = "A URL da imagem deve ter no máximo 255 caracteres")
     private String animalImageUrl;
 }

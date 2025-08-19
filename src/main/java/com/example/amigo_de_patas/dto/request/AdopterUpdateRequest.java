@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AdopterUpdateRequest {
 
-    @Size(max = 150, message = "Name must be up to 100 characters")
+    @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
     private String adopterFullName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
