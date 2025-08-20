@@ -3,6 +3,7 @@ package com.example.amigo_de_patas.controller;
 import com.example.amigo_de_patas.dto.request.AdopterCreateRequest;
 import com.example.amigo_de_patas.dto.request.AdopterUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AdopterResponse;
+import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AdopterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ public class AdopterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdopterResponse>> getAllAdopters(){
+    public ResponseEntity<ApiResponse<List<AdopterResponse>>> getAllAdopters(){
         List<AdopterResponse> responseList = adopterService.getAllAdopters();
-        return ResponseEntity.ok(responseList);
+        return ResponseEntity.ok(new ApiResponse<>(responseList));
     }
 
     @GetMapping("/{adopterId}")

@@ -3,6 +3,7 @@ package com.example.amigo_de_patas.controller;
 import com.example.amigo_de_patas.dto.request.AnimalCreateRequest;
 import com.example.amigo_de_patas.dto.request.AnimalUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AnimalResponse;
+import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AnimalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,9 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AnimalResponse>> getAllAnimals(){
+    public ResponseEntity<ApiResponse<List<AnimalResponse>>> getAllAnimals(){
         List<AnimalResponse> responseList = animalService.getAllAnimals();
-        return ResponseEntity.ok(responseList);
+        return ResponseEntity.ok(new ApiResponse<>(responseList));
     }
 
 
