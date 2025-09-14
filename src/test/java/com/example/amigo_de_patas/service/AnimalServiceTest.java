@@ -13,6 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -77,16 +81,17 @@ class AnimalServiceTest {
     }
 
     @Test
-    void shouldReturnAllAnimals() {
-        List<Animal> animals = List.of(animal);
+    void shouldReturnPagedAnimals() {
+        Page<Animal> animalsPage = new PageImpl<>(List.of(animal));
 
-        when(animalRepository.findAll()).thenReturn(animals);
+        when(animalRepository.findAll(any(Pageable.class))).thenReturn(animalsPage);
         when(animalMapper.toResponse(animal)).thenReturn(animalResponse);
 
-        List<AnimalResponse> result = animalService.getAllAnimals();
+        Page<AnimalResponse> result = animalService.getAllAnimals(PageRequest.of(0, 10));
 
-        assertEquals(1, result.size());
-        verify(animalRepository).findAll();
+        assertEquals(1, result.getContent().size());
+        assertEquals(animalResponse, result.getContent().getFirst());
+        verify(animalRepository).findAll(any(Pageable.class));
     }
 
     @Test

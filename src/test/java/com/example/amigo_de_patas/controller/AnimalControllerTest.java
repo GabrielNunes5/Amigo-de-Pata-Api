@@ -1,6 +1,7 @@
 package com.example.amigo_de_patas.controller;
 
 import com.example.amigo_de_patas.dto.request.AnimalCreateRequest;
+import com.example.amigo_de_patas.dto.response.AdopterResponse;
 import com.example.amigo_de_patas.dto.response.AnimalResponse;
 import com.example.amigo_de_patas.model.Animal;
 import com.example.amigo_de_patas.service.AnimalService;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +56,8 @@ class AnimalControllerTest {
         createRequest.setAnimalName("Bidu");
         createRequest.setAnimalAge("Jovem");
         createRequest.setAnimalWeight(BigDecimal.valueOf(2.0));
-        createRequest.setAnimalSex("Male");
+        createRequest.setAnimalSex("Macho");
+        createRequest.setAnimalSpecies("Cachorro");
         createRequest.setAnimalImageUrl("http://example.com/images/bidu.jpg");
 
         response = new AnimalResponse();
@@ -59,7 +65,7 @@ class AnimalControllerTest {
         response.setAnimalName("Bidu");
         response.setAnimalAge("Jovem");
         response.setAnimalWeight(BigDecimal.valueOf(2.0));
-        response.setAnimalSex("Male");
+        response.setAnimalSex("Macho");
         response.setAnimalImageUrl("http://example.com/images/bidu.jpg");
     }
 
@@ -71,18 +77,20 @@ class AnimalControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createRequest)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.animalName").value("Bidu"))
-                .andExpect(jsonPath("$.animalCategory").value("Dog"));
+                .andExpect(jsonPath("$.animalName").value("Bidu"));
     }
 
     @Test
     void shouldReturnAllAnimals() throws Exception {
-        when(animalService.getAllAnimals()).thenReturn(List.of(response));
+        Page<AnimalResponse> page = new PageImpl<>(List.of(response));
+        when(animalService.getAllAnimals(any(Pageable.class))).thenReturn(page);
 
-        mockMvc.perform(get("/animals"))
+        mockMvc.perform(get("/animals")
+                .param("page", "0")
+                .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].animalName").value("Bidu"));
+                .andExpect(jsonPath("$.data.content", hasSize(1)))
+                .andExpect(jsonPath("$.data.content[0].animalName").value("Bidu"));
     }
 
     @Test

@@ -6,10 +6,11 @@ import com.example.amigo_de_patas.dto.response.AnimalResponse;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AnimalService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +29,8 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AnimalResponse>>> getAllAnimals(){
-        List<AnimalResponse> responseList = animalService.getAllAnimals();
+    public ResponseEntity<ApiResponse<Page<AnimalResponse>>> getAllAnimals(Pageable pageable){
+        Page<AnimalResponse> responseList = animalService.getAllAnimals(pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
     }
 

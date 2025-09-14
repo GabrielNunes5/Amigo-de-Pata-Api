@@ -2,6 +2,8 @@ package com.example.amigo_de_patas.service;
 
 import com.example.amigo_de_patas.dto.request.AnimalCreateRequest;
 import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.amigo_de_patas.repository.AnimalRepository;
@@ -9,10 +11,7 @@ import com.example.amigo_de_patas.model.Animal;
 import com.example.amigo_de_patas.dto.request.AnimalUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AnimalResponse;
 import com.example.amigo_de_patas.mapper.AnimalMapper;
-
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AnimalService {
@@ -32,10 +31,9 @@ public class AnimalService {
     }
 
 
-    public List<AnimalResponse> getAllAnimals() {
-        return animalRepository.findAll().stream()
-                .map(animalMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<AnimalResponse> getAllAnimals(Pageable pageable) {
+        return animalRepository.findAll(pageable)
+                .map(animalMapper::toResponse);
     }
 
     public AnimalResponse getAnimalById(UUID id) {
