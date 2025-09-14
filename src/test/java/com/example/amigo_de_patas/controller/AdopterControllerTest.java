@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -82,15 +83,18 @@ public class AdopterControllerTest {
     @Test
     void shouldReturnAllAdopters() throws Exception {
         Page<AdopterResponse> page = new PageImpl<>(List.of(response));
+
         when(adopterService.getAllAdopters(any(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/adopters")
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].adopterFullName").value("Jhon Doe"));
+                .andExpect(jsonPath("$.data.content", hasSize(1)))
+                .andExpect(jsonPath("$.data.content[0].adopterFullName").value("Jhon Doe"));
     }
+
+
 
     @Test
     void shouldReturnAdopterById() throws Exception {
