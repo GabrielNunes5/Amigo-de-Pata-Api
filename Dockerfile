@@ -2,7 +2,7 @@ FROM ubuntu:latest AS build
 LABEL authors="Gabriel N"
 
 RUN apt-get update
-RUN apt-get install open-jdk-22-jdk -y
+RUN apt-get install openjdk-22-jdk -y
 COPY . .
 
 RUN apt-get install maven -y
