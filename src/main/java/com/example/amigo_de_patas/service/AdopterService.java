@@ -7,6 +7,8 @@ import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
 import com.example.amigo_de_patas.mapper.AdopterMapper;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.repository.AdopterRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +33,9 @@ public class AdopterService {
         return adopterMapper.toResponse(saved);
     }
 
-    public List<AdopterResponse> getAllAdopters(){
-        return adopterRepository.findAll().stream()
-                .map(adopterMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<AdopterResponse> getAllAdopters(Pageable pageable){
+        return adopterRepository.findAll(pageable)
+                .map(adopterMapper::toResponse);
     }
 
     public AdopterResponse getAdopterById(UUID id){

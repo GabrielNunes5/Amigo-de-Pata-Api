@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -78,12 +81,15 @@ public class AdopterControllerTest {
 
     @Test
     void shouldReturnAllAdopters() throws Exception {
-        when(adopterService.getAllAdopters()).thenReturn(List.of(response));
+        Page<AdopterResponse> page = new PageImpl<>(List.of(response));
+        when(adopterService.getAllAdopters(any(Pageable.class))).thenReturn(page);
 
-        mockMvc.perform(get("/adopters"))
+        mockMvc.perform(get("/adopters")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].adopterFullName").value("Jhon Doe"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].adopterFullName").value("Jhon Doe"));
     }
 
     @Test

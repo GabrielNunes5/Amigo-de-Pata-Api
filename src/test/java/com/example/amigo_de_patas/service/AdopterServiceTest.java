@@ -13,6 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -78,17 +82,20 @@ public class AdopterServiceTest {
     }
 
     @Test
-    void shouldReturnAllAdopters() {
-        List<Adopter> adopters = List.of(adopter);
+    void shouldReturnPagedAdopters() {
+        Page<Adopter> adoptersPage = new PageImpl<>(List.of(adopter));
 
-        when(adopterRepository.findAll()).thenReturn(adopters);
+        when(adopterRepository.findAll(any(Pageable.class))).thenReturn(adoptersPage);
         when(adopterMapper.toResponse(adopter)).thenReturn(response);
 
-        List<AdopterResponse> result = adopterService.getAllAdopters();
+        Page<AdopterResponse> result = adopterService.getAllAdopters(PageRequest.of(0, 10));
 
-        assertEquals(1, result.size());
-        verify(adopterRepository).findAll();
+        assertEquals(1, result.getContent().size());
+        assertEquals(response, result.getContent().getFirst());
+        verify(adopterRepository).findAll(any(Pageable.class));
     }
+
+
 
     @Test
     void shouldReturnAdopterById() {

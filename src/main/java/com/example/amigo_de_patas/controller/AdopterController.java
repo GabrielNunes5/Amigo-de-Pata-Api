@@ -7,11 +7,11 @@ import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AdopterService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -27,8 +27,8 @@ public class AdopterController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AdopterResponse>>> getAllAdopters(){
-        List<AdopterResponse> responseList = adopterService.getAllAdopters();
+    public ResponseEntity<ApiResponse<Page<AdopterResponse>>> getAllAdopters(Pageable pageable){
+        Page<AdopterResponse> responseList = adopterService.getAllAdopters(pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
     }
 
