@@ -14,13 +14,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200") // front-end
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-
-                registry.addMapping("/**")
-                        .allowedOrigins("https://gabrielnunes5.github.io/Amigo-de-Patas-Front")
+                        .allowedOrigins(
+                                "http://localhost:4200",
+                                "https://gabrielnunes5.github.io/Amigo-de-Patas-Front")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
