@@ -36,9 +36,9 @@ public class AnimalController {
 
 
     @GetMapping("/{animalId}")
-    public ResponseEntity<AnimalResponse> getAnimalById(@PathVariable UUID animalId) {
+    public ResponseEntity<ApiResponse<AnimalResponse>> getAnimalById(@PathVariable UUID animalId) {
         AnimalResponse response = animalService.getAnimalById(animalId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(response));
     }
 
     @PutMapping("/{animalId}")

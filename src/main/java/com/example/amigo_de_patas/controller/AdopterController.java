@@ -33,9 +33,9 @@ public class AdopterController {
     }
 
     @GetMapping("/{adopterId}")
-    public ResponseEntity<AdopterResponse> getAdopterById(@PathVariable UUID adopterId){
+    public ResponseEntity<ApiResponse<AdopterResponse>> getAdopterById(@PathVariable UUID adopterId){
         AdopterResponse response = adopterService.getAdopterById(adopterId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(response));
     }
 
     @PutMapping("/{adopterId}")
