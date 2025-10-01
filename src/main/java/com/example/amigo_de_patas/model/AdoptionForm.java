@@ -25,12 +25,6 @@ public class AdoptionForm {
     @JoinColumn(name = "animal_id")
     private Animal animal;
 
-    @Column(nullable = false, length = 20)
-    private String typeHouse;
-
-    @Column(nullable = false)
-    private Boolean hasGarden = false;
-
     @Column()
     private String experience;
 

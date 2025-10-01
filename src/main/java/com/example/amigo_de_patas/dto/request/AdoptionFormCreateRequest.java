@@ -23,12 +23,6 @@ public class AdoptionFormCreateRequest {
     @JsonProperty("animal_id")
     private UUID animalId;
 
-    @NotBlank(message = "O tipo da casa é obrigatório")
-    private String typeHouse;
-
-    @NotNull
-    private Boolean hasGarden;
-
     @Size(max = 255, message = "A experiencia devem ter no máximo 255 caracteres")
     private String experience;
 

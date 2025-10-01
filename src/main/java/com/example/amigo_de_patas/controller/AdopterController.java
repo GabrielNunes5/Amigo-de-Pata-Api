@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/adopters")
+@RequestMapping("/api/adopters")
 public class AdopterController {
     @Autowired
     private AdopterService adopterService;

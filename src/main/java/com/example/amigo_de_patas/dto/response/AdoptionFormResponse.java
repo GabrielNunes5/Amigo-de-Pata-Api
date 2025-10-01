@@ -12,12 +12,13 @@ import java.util.UUID;
 public class AdoptionFormResponse {
 
     private UUID formId;
+
     private UUID adopterId;
     private String adopterName;
+
     private UUID animalId;
     private String animalName;
-    private String typeHouse;
-    private Boolean hasGarden;
+
     private String experience;
     private String otherAnimals;
     private String message;

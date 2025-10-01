@@ -30,4 +30,8 @@ public class AdopterUpdateRequest {
     private String adopterPhone;
 
     private String adopterAddress;
+
+    private String typeHouse;
+
+    private Boolean hasGarden;
 }

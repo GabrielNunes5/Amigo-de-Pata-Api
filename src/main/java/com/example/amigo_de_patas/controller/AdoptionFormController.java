@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/adoption-form")
+@RequestMapping("/api/adoption-form")
 public class AdoptionFormController {
 
     @Autowired

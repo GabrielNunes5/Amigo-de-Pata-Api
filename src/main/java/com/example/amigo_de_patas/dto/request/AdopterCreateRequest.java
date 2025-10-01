@@ -1,10 +1,7 @@
 package com.example.amigo_de_patas.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,7 @@ public class AdopterCreateRequest {
 
     @Past(message = "A data de nascimento deve estar no passado")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @NotNull
     private LocalDate adopterBirthDate;
 
     @NotBlank(message = "CPF é obrigatório")
@@ -32,9 +30,18 @@ public class AdopterCreateRequest {
     @Email
     private String adopterEmail;
 
+    @NotBlank(message = "Senha é obrigatório")
+    private String adopterPassword;
+
     @NotBlank(message = "Numero de telefone é obrigatório")
     private String adopterPhone;
 
     @NotBlank(message = "Endereço é obrigatório")
     private String adopterAddress;
+
+    @NotBlank(message = "O tipo da casa é obrigatório")
+    private String typeHouse;
+
+    @NotNull
+    private Boolean hasGarden;
 }
