@@ -7,12 +7,16 @@ import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
 import com.example.amigo_de_patas.mapper.AdopterMapper;
 import com.example.amigo_de_patas.model.Adopter;
+import com.example.amigo_de_patas.service.AdopterService;
 import com.example.amigo_de_patas.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,10 +24,12 @@ public class AuthController {
 
     private final AuthService authService;
     private final AdopterMapper adopterMapper;
+    private final AdopterService adopterService;
 
-    public AuthController(AuthService authService, AdopterMapper adopterMapper) {
+    public AuthController(AuthService authService, AdopterMapper adopterMapper, AdopterService adopterService) {
         this.authService = authService;
         this.adopterMapper = adopterMapper;
+        this.adopterService = adopterService;
     }
 
     @PostMapping("/login")
@@ -44,9 +50,10 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<AdopterResponse>> me(Authentication authentication) {
-        Adopter adopter = (Adopter) authentication.getPrincipal();
-        AdopterResponse response = adopterMapper.toResponse(adopter);
-        return ResponseEntity.ok(new ApiResponse<>(response));
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID adopterId = UUID.fromString(jwt.getClaim("adopterId"));
+        AdopterResponse adopter = adopterService.getAdopterById(adopterId);
+        return ResponseEntity.ok(new ApiResponse<>(adopter));
     }
 
 }
