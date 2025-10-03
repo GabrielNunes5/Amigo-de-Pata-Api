@@ -30,7 +30,12 @@ public class AdopterCreateRequest {
     @Email
     private String adopterEmail;
 
-    @NotBlank(message = "Senha é obrigatório")
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "A senha deve conter pelo menos: uma letra maiúscula, uma letra minúscula, um número e um caractere especial"
+    )
     private String adopterPassword;
 
     @NotBlank(message = "Numero de telefone é obrigatório")
@@ -43,5 +48,5 @@ public class AdopterCreateRequest {
     private String typeHouse;
 
     @NotNull
-    private Boolean hasGarden;
+    private Boolean hasGarden = false;
 }

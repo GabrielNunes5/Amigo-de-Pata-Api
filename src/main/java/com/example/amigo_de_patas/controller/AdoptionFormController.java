@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,8 +25,11 @@ public class AdoptionFormController {
     public AdoptionFormService adoptionFormService;
 
     @PostMapping
-    public ResponseEntity<AdoptionFormResponse> createAdoptionForm(@Valid @RequestBody AdoptionFormCreateRequest request){
-        AdoptionFormResponse response = adoptionFormService.createAdoptionForm(request);
+    public ResponseEntity<AdoptionFormResponse> createAdoptionForm(@Valid @RequestBody AdoptionFormCreateRequest request, Authentication authentication){
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID adopterId = UUID.fromString(jwt.getClaim("adopterId"));
+
+        AdoptionFormResponse response = adoptionFormService.createAdoptionForm(request, adopterId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -34,8 +39,11 @@ public class AdoptionFormController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/adopter/{adopterId}")
-    public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAdoptionFormsByAdopter(@PathVariable UUID adopterId, Pageable pageable){
+    @GetMapping("/adopter")
+    public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAdoptionFormsByAdopter(Pageable pageable, Authentication authentication){
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID adopterId = UUID.fromString(jwt.getClaim("adopterId"));
+
         Page<AdoptionFormResponse> responseList = adoptionFormService.getAdoptionFormByAdopterId(adopterId, pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
 

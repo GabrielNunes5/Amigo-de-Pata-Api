@@ -40,14 +40,14 @@ public class AuthService implements UserDetailsService {
             throw new BadCredentialsException("Credenciais inválidas");
         }
 
-        String token = jwtService.generateToken(adopter);
+        String accessToken = jwtService.generateAccessToken(adopter);
+        String refreshToken = jwtService.generateRefreshToken(adopter);
 
         return new AuthResponse(
-                token,
+                accessToken,
+                refreshToken,
                 jwtService.getExpirationInSeconds(),
-                adopter.getAdopterFullName(),
-                adopter.getAdopterEmail(),
-                adopter.getRole()
+                "Bearer"
         );
     }
 
@@ -70,14 +70,14 @@ public class AuthService implements UserDetailsService {
 
         adopterRepository.save(adopter);
 
-        String token = jwtService.generateToken(adopter);
+        String accessToken = jwtService.generateAccessToken(adopter);
+        String refreshToken = jwtService.generateRefreshToken(adopter);
 
         return new AuthResponse(
-                token,
+                accessToken,
+                refreshToken,
                 jwtService.getExpirationInSeconds(),
-                adopter.getAdopterFullName(),
-                adopter.getAdopterEmail(),
-                adopter.getRole()
+                "Bearer"
         );
     }
 }

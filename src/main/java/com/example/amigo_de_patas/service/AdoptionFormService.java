@@ -35,9 +35,10 @@ public class AdoptionFormService {
     }
 
     @Transactional
-    public AdoptionFormResponse createAdoptionForm(AdoptionFormCreateRequest req){
-        Adopter adopter = adopterRepository.findById(req.getAdopterId())
+    public AdoptionFormResponse createAdoptionForm(AdoptionFormCreateRequest req, UUID adopterId){
+        Adopter adopter = adopterRepository.findById(adopterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Adotante não encontrado"));
+
         Animal animal = animalRepository.findById(req.getAnimalId())
                 .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado"));
 

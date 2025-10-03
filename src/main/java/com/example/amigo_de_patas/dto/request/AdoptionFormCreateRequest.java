@@ -16,11 +16,6 @@ import java.util.UUID;
 public class AdoptionFormCreateRequest {
 
     @NotNull
-    @JsonProperty("adopter_id")
-    private UUID adopterId;
-
-    @NotNull
-    @JsonProperty("animal_id")
     private UUID animalId;
 
     @Size(max = 255, message = "A experiencia devem ter no máximo 255 caracteres")
