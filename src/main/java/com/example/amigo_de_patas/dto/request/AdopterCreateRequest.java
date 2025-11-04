@@ -18,7 +18,7 @@ public class AdopterCreateRequest {
     private String adopterFullName;
 
     @Past(message = "A data de nascimento deve estar no passado")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @NotNull
     private LocalDate adopterBirthDate;
 
