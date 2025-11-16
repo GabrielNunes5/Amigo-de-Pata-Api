@@ -38,7 +38,7 @@ public class JwtService {
                 .expiresAt(now.plusSeconds(expirationInSeconds))
                 .subject(userDetails.getUsername())
                 .claim("adopterId", adopter.getAdopterId().toString())
-                .claim("roles", userDetails.getAuthorities().stream()
+                .claim("scope", userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority).toList())
                 .build();
 
