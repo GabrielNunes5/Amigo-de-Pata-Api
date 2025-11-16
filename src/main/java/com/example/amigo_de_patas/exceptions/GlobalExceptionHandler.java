@@ -1,7 +1,5 @@
 package com.example.amigo_de_patas.exceptions;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
@@ -18,6 +15,35 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(
+            MethodArgumentNotValidException ex,
+            WebRequest request
+    ) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+
+        StringBuilder messageBuilder = new StringBuilder("Campos inválidos: ");
+
+        errors.forEach((field, msg) -> {
+            messageBuilder.append(msg).append("; ");
+        });
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de validação",
+                messageBuilder.toString(),
+                ((ServletWebRequest) request).getRequest().getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
@@ -43,22 +69,40 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex,
-                                                                      WebRequest request) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("timestamp", LocalDateTime.now());
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("error", "Requisição inválida");
-        response.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
-
-        Map<String, String> fieldErrors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(err ->
-                fieldErrors.put(err.getField(), err.getDefaultMessage())
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflito",
+                ex.getMessage(),
+                ((ServletWebRequest) request).getRequest().getRequestURI()
         );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
-        response.put("mensagens", fieldErrors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Requisição inválida",
+                ex.getMessage(),
+                ((ServletWebRequest) request).getRequest().getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException ex, WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Não autorizado",
+                ex.getMessage(),
+                ((ServletWebRequest) request).getRequest().getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(Exception.class)
