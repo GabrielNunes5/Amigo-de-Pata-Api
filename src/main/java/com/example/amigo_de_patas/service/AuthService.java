@@ -3,6 +3,10 @@ package com.example.amigo_de_patas.service;
 import com.example.amigo_de_patas.dto.request.AdopterCreateRequest;
 import com.example.amigo_de_patas.dto.request.AuthCreateRequest;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
+import com.example.amigo_de_patas.exceptions.BadRequestException;
+import com.example.amigo_de_patas.exceptions.ConflictException;
+import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
+import com.example.amigo_de_patas.exceptions.UnauthorizedException;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.model.Role;
 import com.example.amigo_de_patas.repository.AdopterRepository;
@@ -34,10 +38,10 @@ public class AuthService implements UserDetailsService {
 
     public AuthResponse login(AuthCreateRequest request) {
         var adopter = adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail())
-                .orElseThrow(() -> new BadCredentialsException("Credenciais inválidas"));
+                .orElseThrow(() -> new UnauthorizedException("Credenciais inválidas"));
 
         if (!passwordEncoder.matches(request.getAdopterPassword(), adopter.getPassword())) {
-            throw new BadCredentialsException("Credenciais inválidas");
+            throw new UnauthorizedException("Credenciais inválidas");
         }
 
         String accessToken = jwtService.generateAccessToken(adopter);
@@ -53,7 +57,15 @@ public class AuthService implements UserDetailsService {
 
     public AuthResponse register(AdopterCreateRequest request) {
         if (adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email já cadastrado");
+            throw new ConflictException("Email já cadastrado");
+        }
+
+        if (adopterRepository.findAdopterByAdopterCPF(request.getAdopterCPF()).isPresent()) {
+            throw new ConflictException("CPF já cadastrado");
+        }
+
+        if (adopterRepository.findAdopterByAdopterPhone(request.getAdopterPhone()).isPresent()){
+            throw new ConflictException("Numero de Telefone ja cadastrado");
         }
 
         Adopter adopter = new Adopter();
