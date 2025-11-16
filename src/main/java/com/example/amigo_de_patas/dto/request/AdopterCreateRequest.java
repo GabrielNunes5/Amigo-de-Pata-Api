@@ -38,6 +38,10 @@ public class AdopterCreateRequest {
     )
     private String adopterPassword;
 
+    @Pattern(
+            regexp = "^\\d{2}9?\\d{8}$",
+            message = "Telefone inválido. Formato esperado: DDD + número. Ex: 11987654321"
+    )
     @NotBlank(message = "Numero de telefone é obrigatório")
     private String adopterPhone;
 
