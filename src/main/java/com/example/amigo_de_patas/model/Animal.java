@@ -41,7 +41,7 @@ public class Animal {
     private String animalSize;
 
     @Column
-    private Boolean animalNeutered;
+    private Boolean animalNeutered = false;
 
     @Column
     private String animalSpecialConditions;

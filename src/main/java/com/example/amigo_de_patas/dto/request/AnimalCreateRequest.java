@@ -38,7 +38,7 @@ public class AnimalCreateRequest {
     @Size(max = 50, message = "O tamanho deve ter no máximo 50 caracteres")
     private String animalSize;
 
-    private Boolean animalNeutered;
+    private Boolean animalNeutered = false;
 
     @Size(max = 255, message = "A condições devem ter no máximo 255 caracteres")
     private String animalSpecialConditions;
