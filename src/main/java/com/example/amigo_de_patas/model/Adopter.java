@@ -67,7 +67,8 @@ public class Adopter implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.role == Role.ADMIN) return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
+        else return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
