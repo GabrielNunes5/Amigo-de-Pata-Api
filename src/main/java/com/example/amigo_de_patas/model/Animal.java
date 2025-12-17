@@ -50,7 +50,8 @@ public class Animal {
     private String animalImageUrl;
 
     @Column
-    private Boolean animalAdopted = false;
+    @ColumnDefault("false")
+    private Boolean animalAdopted;
 
     @ManyToOne
     @JoinColumn(name = "adopter_id")
