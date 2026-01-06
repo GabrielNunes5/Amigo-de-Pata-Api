@@ -55,19 +55,19 @@ public class AdoptionFormService {
     ) {
         if (animalId != null) {
             return adoptionFormRepository
-                    .findByAnimalId(animalId, pageable)
+                    .findAllByAnimal_AnimalId(animalId, pageable)
                     .map(adoptionFormMapper::toResponse);
         }
     
         if (adopterId != null) {
             return adoptionFormRepository
-                    .findByAdopterId(adopterId, pageable)
+                    .findAllByAdopter_AdopterId(adopterId, pageable)
                     .map(adoptionFormMapper::toResponse);
         }
     
         if (status != null) {
             return adoptionFormRepository
-                    .findByStatus(status, pageable)
+                    .findAllByStatus(status, pageable)
                     .map(adoptionFormMapper::toResponse);
         }
     
