@@ -48,26 +48,33 @@ public class AdoptionFormService {
     }
 
     public Page<AdoptionFormResponse> findAll(
-    UUID animalId,
-    UUID adopterId,
-    String status,
-    Pageable pageable
+            UUID animalId,
+            UUID adopterId,
+            String status,
+            Pageable pageable
     ) {
         if (animalId != null) {
-            return repository.findByAnimalId(animalId, pageable).map(mapper::toResponse);
+            return adoptionFormRepository
+                    .findByAnimalId(animalId, pageable)
+                    .map(adoptionFormMapper::toResponse);
         }
     
         if (adopterId != null) {
-            return repository.findByAdopterId(adopterId, pageable).map(mapper::toResponse);
+            return adoptionFormRepository
+                    .findByAdopterId(adopterId, pageable)
+                    .map(adoptionFormMapper::toResponse);
         }
     
         if (status != null) {
-            return repository.findByStatus(status, pageable).map(mapper::toResponse);
+            return adoptionFormRepository
+                    .findByStatus(status, pageable)
+                    .map(adoptionFormMapper::toResponse);
         }
     
-        return repository.findAll(pageable).map(mapper::toResponse);
+        return adoptionFormRepository
+                .findAll(pageable)
+                .map(adoptionFormMapper::toResponse);
     }
-
 
     public AdoptionFormResponse getAdoptionFormById(UUID id){
         AdoptionForm entity = adoptionFormRepository.findById(id)
