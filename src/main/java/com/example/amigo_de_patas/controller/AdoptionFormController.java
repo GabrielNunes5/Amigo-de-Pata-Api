@@ -37,10 +37,9 @@ public class AdoptionFormController {
     public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAll(
         @RequestParam(required = false) UUID animalId,
         @RequestParam(required = false) UUID adopterId,
-        @RequestParam(required = false) String status,
         Pageable pageable
     ) {
-        Page<AdoptionFormResponse> response = adoptionFormService.findAll(animalId, adopterId, status, pageable);
+        Page<AdoptionFormResponse> response = adoptionFormService.findAll(animalId, adopterId, pageable);
         return ResponseEntity.ok(new ApiResponse<>(response));
     }
 
