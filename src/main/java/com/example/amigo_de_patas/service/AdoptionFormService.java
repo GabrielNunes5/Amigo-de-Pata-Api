@@ -50,7 +50,6 @@ public class AdoptionFormService {
     public Page<AdoptionFormResponse> findAll(
             UUID animalId,
             UUID adopterId,
-            String status,
             Pageable pageable
     ) {
         if (animalId != null) {
@@ -62,12 +61,6 @@ public class AdoptionFormService {
         if (adopterId != null) {
             return adoptionFormRepository
                     .findAllByAdopter_AdopterId(adopterId, pageable)
-                    .map(adoptionFormMapper::toResponse);
-        }
-    
-        if (status != null) {
-            return adoptionFormRepository
-                    .findAllByStatus(status, pageable)
                     .map(adoptionFormMapper::toResponse);
         }
     
