@@ -33,6 +33,17 @@ public class AdoptionFormController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAll(
+        @RequestParam(required = false) UUID animalId,
+        @RequestParam(required = false) UUID adopterId,
+        @RequestParam(required = false) String status,
+        Pageable pageable
+    ) {
+        Page<AdoptionFormResponse> response = adoptionFormService.findAll(animalId, adopterId, status, pageable);
+        return ResponseEntity.ok(new ApiResponse<>(response));
+    }
+
     @GetMapping("/{adoptionFormId}")
     public ResponseEntity<AdoptionFormResponse> getAdoptionFormById(@PathVariable UUID adoptionFormId){
         AdoptionFormResponse response = adoptionFormService.getAdoptionFormById(adoptionFormId);
