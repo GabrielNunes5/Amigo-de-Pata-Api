@@ -47,6 +47,28 @@ public class AdoptionFormService {
         return adoptionFormMapper.toResponse(saved);
     }
 
+    public Page<AdoptionFormResponse> findAll(
+    UUID animalId,
+    UUID adopterId,
+    String status,
+    Pageable pageable
+    ) {
+        if (animalId != null) {
+            return repository.findByAnimalId(animalId, pageable).map(mapper::toResponse);
+        }
+    
+        if (adopterId != null) {
+            return repository.findByAdopterId(adopterId, pageable).map(mapper::toResponse);
+        }
+    
+        if (status != null) {
+            return repository.findByStatus(status, pageable).map(mapper::toResponse);
+        }
+    
+        return repository.findAll(pageable).map(mapper::toResponse);
+    }
+
+
     public AdoptionFormResponse getAdoptionFormById(UUID id){
         AdoptionForm entity = adoptionFormRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Formulario Não encontrado"));
