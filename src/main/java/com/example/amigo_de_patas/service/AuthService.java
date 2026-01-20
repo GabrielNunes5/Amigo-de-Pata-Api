@@ -3,6 +3,7 @@ package com.example.amigo_de_patas.service;
 import com.example.amigo_de_patas.dto.request.AdopterCreateRequest;
 import com.example.amigo_de_patas.dto.request.AuthCreateRequest;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
+import com.example.amigo_de_patas.exceptions.BadRequestException;
 import com.example.amigo_de_patas.exceptions.ConflictException;
 import com.example.amigo_de_patas.exceptions.UnauthorizedException;
 import com.example.amigo_de_patas.model.Adopter;
@@ -14,12 +15,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 @Service
 public class AuthService implements UserDetailsService {
 
     private final AdopterRepository adopterRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+
+    private boolean isAdult(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears() >= 18;
+    }
 
     public AuthService(AdopterRepository adopterRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.adopterRepository = adopterRepository;
@@ -53,6 +61,10 @@ public class AuthService implements UserDetailsService {
     }
 
     public AuthResponse register(AdopterCreateRequest request) {
+        if (!isAdult(request.getAdopterBirthDate())) {
+            throw new BadRequestException("O adotante deve ter pelo menos 18 anos");
+        }
+
         if (adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail()).isPresent()) {
             throw new ConflictException("Email já cadastrado");
         }
