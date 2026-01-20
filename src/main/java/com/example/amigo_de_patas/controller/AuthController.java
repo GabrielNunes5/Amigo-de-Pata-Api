@@ -5,8 +5,6 @@ import com.example.amigo_de_patas.dto.request.AuthCreateRequest;
 import com.example.amigo_de_patas.dto.response.AdopterResponse;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
-import com.example.amigo_de_patas.mapper.AdopterMapper;
-import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.service.AdopterService;
 import com.example.amigo_de_patas.service.AuthService;
 import jakarta.validation.Valid;
@@ -23,12 +21,10 @@ import java.util.UUID;
 public class AuthController {
 
     private final AuthService authService;
-    private final AdopterMapper adopterMapper;
     private final AdopterService adopterService;
 
-    public AuthController(AuthService authService, AdopterMapper adopterMapper, AdopterService adopterService) {
+    public AuthController(AuthService authService, AdopterService adopterService) {
         this.authService = authService;
-        this.adopterMapper = adopterMapper;
         this.adopterService = adopterService;
     }
 
@@ -40,12 +36,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid AdopterCreateRequest request) {
-        try {
             AuthResponse response = authService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
     }
 
     @GetMapping("/me")
