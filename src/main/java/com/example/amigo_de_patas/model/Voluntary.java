@@ -3,7 +3,10 @@ package com.example.amigo_de_patas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,8 +59,14 @@ public class Voluntary {
     @Column(nullable = false)
     private Boolean canWorkOnWeekends = false;
 
-    @Column
+    @Column()
     private String voluntarySpecialSkills;
+
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     @Transient
     public List<String> getVoluntaryInterestArea(){
