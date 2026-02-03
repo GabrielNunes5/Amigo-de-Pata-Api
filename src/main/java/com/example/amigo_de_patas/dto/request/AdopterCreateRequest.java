@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AdopterCreateRequest {
     @NotBlank(message = "Nome é obrigatório")
-    @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
     private String adopterFullName;
 
     @Past(message = "A data de nascimento deve estar no passado")
