@@ -43,9 +43,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/ping").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/voluntary/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
                         .requestMatchers("/api/animals/**").hasAuthority("SCOPE_ADMIN")
                         .requestMatchers("/api/adopters/**").hasAuthority("SCOPE_ADMIN")
+                        .requestMatchers("/api/voluntary/**").hasAuthority("SCOPE_ADMIN")
                         .anyRequest().authenticated())
                 .build();
     }
