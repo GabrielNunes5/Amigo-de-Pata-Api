@@ -9,8 +9,12 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +30,18 @@ public class AnimalController {
     public ResponseEntity<AnimalResponse> createAnimal(@Valid @RequestBody AnimalCreateRequest request) {
         AnimalResponse response = animalService.createAnimal(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping(
+            value = "/{animalId}/images",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<Void> uploadImages(
+            @PathVariable UUID animalId,
+            @RequestPart("files")List<MultipartFile> files
+            ) {
+        animalService.uploadImages(animalId, files);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

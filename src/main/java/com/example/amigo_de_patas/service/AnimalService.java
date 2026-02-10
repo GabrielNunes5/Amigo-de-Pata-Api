@@ -1,7 +1,9 @@
 package com.example.amigo_de_patas.service;
 
 import com.example.amigo_de_patas.dto.request.AnimalCreateRequest;
+import com.example.amigo_de_patas.exceptions.BadRequestException;
 import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
+import com.example.amigo_de_patas.model.AnimalImage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,16 +13,23 @@ import com.example.amigo_de_patas.model.Animal;
 import com.example.amigo_de_patas.dto.request.AnimalUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AnimalResponse;
 import com.example.amigo_de_patas.mapper.AnimalMapper;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class AnimalService {
+
     private final AnimalRepository animalRepository;
     private final AnimalMapper animalMapper;
+    private final CloudinaryService cloudinaryService;
 
-    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper) {
+    public AnimalService(AnimalRepository animalRepository, AnimalMapper animalMapper, CloudinaryService cloudinaryService) {
         this.animalRepository = animalRepository;
         this.animalMapper = animalMapper;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Transactional
@@ -30,6 +39,34 @@ public class AnimalService {
         return animalMapper.toResponse(saved);
     }
 
+    @Transactional
+    public void uploadImages(UUID id, List<MultipartFile> files){
+        if(files == null || files.isEmpty()) {
+            throw new BadRequestException("Nenhuma imagem enviada");
+        }
+
+        if (files.size() > 10){
+            throw new BadRequestException("Máximo de 10 imagens por animal");
+        }
+
+        Animal entity = animalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Animal não encontrado"));
+
+        for (MultipartFile file : files) {
+
+            if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
+                throw new BadRequestException("Arquivo Invalido");
+            }
+
+            String url = cloudinaryService.uploadImage(file);
+
+            AnimalImage image = new AnimalImage();
+            image.setUrl(url);
+            image.setAnimal(entity);
+
+            entity.getAnimalImages().add(image);
+        }
+    }
 
     public Page<AnimalResponse> getAllAnimals(Pageable pageable) {
         return animalRepository.findAll(pageable)

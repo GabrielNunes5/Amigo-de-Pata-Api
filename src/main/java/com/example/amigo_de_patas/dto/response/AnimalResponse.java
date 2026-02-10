@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,6 +25,7 @@ public class AnimalResponse {
     private Boolean animalNeutered;
     private String animalSpecialConditions;
     private String animalImageUrl;
+    private List<String> animalImages;
     private Boolean animalAdopted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
