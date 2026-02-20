@@ -36,12 +36,12 @@ public class AnimalController {
             value = "/{animalId}/images",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<Void> uploadImages(
+    public ResponseEntity<AnimalResponse> uploadImages(
             @PathVariable UUID animalId,
             @RequestPart("files")List<MultipartFile> files
             ) {
-        animalService.uploadImages(animalId, files);
-        return ResponseEntity.noContent().build();
+        AnimalResponse response = animalService.uploadImages(animalId, files);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping

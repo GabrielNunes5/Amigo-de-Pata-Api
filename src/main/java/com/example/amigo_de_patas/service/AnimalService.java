@@ -40,7 +40,7 @@ public class AnimalService {
     }
 
     @Transactional
-    public void uploadImages(UUID id, List<MultipartFile> files){
+    public AnimalResponse uploadImages(UUID id, List<MultipartFile> files){
         if(files == null || files.isEmpty()) {
             throw new BadRequestException("Nenhuma imagem enviada");
         }
@@ -66,6 +66,8 @@ public class AnimalService {
 
             entity.getAnimalImages().add(image);
         }
+
+        return animalMapper.toResponse(entity);
     }
 
     public Page<AnimalResponse> getAllAnimals(Pageable pageable) {
