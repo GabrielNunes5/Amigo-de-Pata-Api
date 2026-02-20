@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -35,11 +36,11 @@ public class VoluntaryCreateRequest {
     @Size(max = 30, message = "A profissão deve ter no máximo 30 caracteres")
     private String voluntaryOccupation;
 
-    @NotBlank(message = "Area de interesse é obrigatório")
-    private String voluntaryInterestArea;
+    @NotEmpty(message = "Area de interesse é obrigatório")
+    private List<String> voluntaryInterestArea;
 
-    @NotBlank(message = "Disponibilidade é obrigatório")
-    private String voluntaryAvailability;
+    @NotEmpty(message = "Disponibilidade é obrigatório")
+    private List<String> voluntaryAvailability;
 
     private String voluntaryExperience;
 
