@@ -27,5 +27,4 @@ public class DonationController {
         DonationResponse response = donationService.createCheckoutSession(donationRequest);
         return ResponseEntity.ok(response);
     }
-
 }
