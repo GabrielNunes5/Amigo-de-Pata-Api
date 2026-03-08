@@ -44,7 +44,7 @@ public class DonationService {
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl(baseUrl + "/donation/sucess")
+                        .setSuccessUrl(baseUrl + "/donation/success")
                         .setCancelUrl(baseUrl + "/donation/cancel")
                         .addLineItem(
                                 SessionCreateParams.LineItem.builder()
