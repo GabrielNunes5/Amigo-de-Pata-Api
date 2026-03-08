@@ -18,11 +18,11 @@ public class JwtService {
 
     @Value("${jwt.expiration-in-seconds}")
     @Getter
-    private Long expirationInSeconds;
+    private Integer expirationInSeconds;
 
     @Value("${jwt.refresh-expiration-in-seconds}")
     @Getter
-    private Long refreshExpirationInSeconds;
+    private Integer refreshExpirationInSeconds;
 
     public JwtService(JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
         this.jwtEncoder = jwtEncoder;
