@@ -7,6 +7,8 @@ import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
 import com.example.amigo_de_patas.service.AdopterService;
 import com.example.amigo_de_patas.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -52,6 +54,19 @@ public class AuthController {
         response.addHeader("Set-Cookie", refreshCookie.toString());
     }
 
+    private String getCookieValue(HttpServletRequest request) {
+
+        if (request.getCookies() == null) return null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("refresh_token")) {
+                return cookie.getValue();
+            }
+        }
+
+        return null;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody @Valid AuthCreateRequest request,
                                       HttpServletResponse response) {
@@ -86,6 +101,47 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse<>(adopter));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<Void> refresh(HttpServletRequest request,
+                                        HttpServletResponse response) {
+
+        String refreshToken = getCookieValue(request);
+
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        AuthResponse authResponse = authService.refreshToken(refreshToken);
+
+        addAuthCookies(response, authResponse);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+
+        ResponseCookie accessCookie = ResponseCookie.from("access_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/auth/refresh")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
+
+        return ResponseEntity.ok().build();
+    }
 }
 
 

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,11 +38,13 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         return adopterRepository.findAdopterByAdopterEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
     public AuthResponse login(AuthCreateRequest request) {
+
         var adopter = adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail())
                 .orElseThrow(() -> new UnauthorizedException("Credenciais inválidas"));
 
@@ -61,6 +64,7 @@ public class AuthService implements UserDetailsService {
     }
 
     public AuthResponse register(AdopterCreateRequest request) {
+
         if (!isAdult(request.getAdopterBirthDate())) {
             throw new BadRequestException("O adotante deve ter pelo menos 18 anos");
         }
@@ -97,6 +101,26 @@ public class AuthService implements UserDetailsService {
         return new AuthResponse(
                 accessToken,
                 refreshToken,
+                jwtService.getExpirationInSeconds(),
+                "Bearer"
+        );
+    }
+    
+    public AuthResponse refreshToken(String refreshToken) {
+
+        Jwt jwt = jwtService.decodeToken(refreshToken);
+
+        String email = jwt.getSubject();
+
+        Adopter adopter = adopterRepository.findAdopterByAdopterEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        String newAccessToken = jwtService.generateAccessToken(adopter);
+        String newRefreshToken = jwtService.generateRefreshToken(adopter);
+
+        return new AuthResponse(
+                newAccessToken,
+                newRefreshToken,
                 jwtService.getExpirationInSeconds(),
                 "Bearer"
         );
