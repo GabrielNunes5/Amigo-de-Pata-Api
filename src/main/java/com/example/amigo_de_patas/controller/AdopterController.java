@@ -17,13 +17,17 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/adopters")
 public class AdopterController {
-    @Autowired
-    private AdopterService adopterService;
+
+    private final AdopterService adopterService;
+
+    public AdopterController(AdopterService adopterService) {
+        this.adopterService = adopterService;
+    }
 
     @PostMapping
-    public ResponseEntity<AdopterResponse> createAdopter(@Valid @RequestBody AdopterCreateRequest request){
+    public ResponseEntity<ApiResponse<AdopterResponse>> createAdopter(@Valid @RequestBody AdopterCreateRequest request){
         AdopterResponse response = adopterService.createAdopter(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(response));
     }
 
     @GetMapping
@@ -39,11 +43,11 @@ public class AdopterController {
     }
 
     @PutMapping("/{adopterId}")
-    public ResponseEntity<AdopterResponse> updateAdopter(
+    public ResponseEntity<ApiResponse<AdopterResponse>> updateAdopter(
             @PathVariable UUID adopterId,
             @RequestBody @Valid AdopterUpdateRequest request ){
         AdopterResponse updated = adopterService.updateAdopter(adopterId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+        return ResponseEntity.ok(new ApiResponse<>(updated));
     }
 
     @DeleteMapping("/{adopterId}")

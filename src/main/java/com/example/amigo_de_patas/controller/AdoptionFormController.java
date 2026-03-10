@@ -20,17 +20,19 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/adoption-form")
 public class AdoptionFormController {
+    private final AdoptionFormService adoptionFormService;
 
-    @Autowired
-    public AdoptionFormService adoptionFormService;
+    public AdoptionFormController(AdoptionFormService adoptionFormService) {
+        this.adoptionFormService = adoptionFormService;
+    }
 
     @PostMapping
-    public ResponseEntity<AdoptionFormResponse> createAdoptionForm(@Valid @RequestBody AdoptionFormCreateRequest request, Authentication authentication){
+    public ResponseEntity<ApiResponse<AdoptionFormResponse>> createAdoptionForm(@Valid @RequestBody AdoptionFormCreateRequest request, Authentication authentication){
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID adopterId = UUID.fromString(jwt.getClaim("adopterId"));
 
         AdoptionFormResponse response = adoptionFormService.createAdoptionForm(request, adopterId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(response));
     }
 
     @GetMapping
@@ -44,9 +46,9 @@ public class AdoptionFormController {
     }
 
     @GetMapping("/{adoptionFormId}")
-    public ResponseEntity<AdoptionFormResponse> getAdoptionFormById(@PathVariable UUID adoptionFormId){
+    public ResponseEntity<ApiResponse<AdoptionFormResponse>> getAdoptionFormById(@PathVariable UUID adoptionFormId){
         AdoptionFormResponse response = adoptionFormService.getAdoptionFormById(adoptionFormId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(response));
     }
 
     @GetMapping("/adopter")
@@ -56,14 +58,11 @@ public class AdoptionFormController {
 
         Page<AdoptionFormResponse> responseList = adoptionFormService.getAdoptionFormByAdopterId(adopterId, pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
-
     }
 
     @GetMapping("/animal/{animalId}")
     public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAdoptionFormsByAnimal(@PathVariable UUID animalId, Pageable pageable){
         Page<AdoptionFormResponse> responseList = adoptionFormService.getAdoptionFormByAnimalId(animalId, pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
-
     }
-
 }

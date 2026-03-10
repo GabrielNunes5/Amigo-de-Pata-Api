@@ -17,13 +17,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/voluntary")
 public class VoluntaryController {
-    @Autowired
-    private VoluntaryService voluntaryService;
+    private final VoluntaryService voluntaryService;
+
+    public VoluntaryController(VoluntaryService voluntaryService) {
+        this.voluntaryService = voluntaryService;
+    }
 
     @PostMapping
-    public ResponseEntity<VoluntaryResponse> createVoluntary(@Valid @RequestBody VoluntaryCreateRequest request){
+    public ResponseEntity<ApiResponse<VoluntaryResponse>> createVoluntary(@Valid @RequestBody VoluntaryCreateRequest request){
         VoluntaryResponse response = voluntaryService.createVoluntary(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(response));
     }
 
     @GetMapping

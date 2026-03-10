@@ -27,21 +27,21 @@ public class AnimalController {
     }
 
     @PostMapping
-    public ResponseEntity<AnimalResponse> createAnimal(@Valid @RequestBody AnimalCreateRequest request) {
+    public ResponseEntity<ApiResponse<AnimalResponse>> createAnimal(@Valid @RequestBody AnimalCreateRequest request) {
         AnimalResponse response = animalService.createAnimal(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(response));
     }
 
     @PostMapping(
             value = "/{animalId}/images",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<AnimalResponse> uploadImages(
+    public ResponseEntity<ApiResponse<AnimalResponse>> uploadImages(
             @PathVariable UUID animalId,
             @RequestPart("files")List<MultipartFile> files
             ) {
         AnimalResponse response = animalService.uploadImages(animalId, files);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(response));
     }
 
     @GetMapping
@@ -58,11 +58,11 @@ public class AnimalController {
     }
 
     @PutMapping("/{animalId}")
-    public ResponseEntity<AnimalResponse> updateAnimal(
+    public ResponseEntity<ApiResponse<AnimalResponse>> updateAnimal(
             @PathVariable UUID animalId,
             @RequestBody @Valid AnimalUpdateRequest request) {
         AnimalResponse updated = animalService.updateAnimal(animalId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+        return ResponseEntity.ok(new ApiResponse<>(updated));
     }
 
     @DeleteMapping("/{animalId}")
