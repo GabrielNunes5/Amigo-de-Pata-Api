@@ -6,7 +6,6 @@ import com.example.amigo_de_patas.dto.response.AdoptionFormResponse;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AdoptionFormService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
