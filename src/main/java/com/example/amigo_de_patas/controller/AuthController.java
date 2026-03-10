@@ -39,7 +39,7 @@ public class AuthController {
                 .secure(true)
                 .path("/")
                 .maxAge(auth.getExpiresIn())
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", auth.getRefreshToken())
@@ -47,7 +47,7 @@ public class AuthController {
                 .secure(true)
                 .path("/api/auth/refresh")
                 .maxAge(604800)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", accessCookie.toString());
@@ -126,7 +126,7 @@ public class AuthController {
                 .secure(true)
                 .path("/")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", "")
@@ -134,7 +134,7 @@ public class AuthController {
                 .secure(true)
                 .path("/api/auth/refresh")
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite("None")
                 .build();
 
         response.addHeader("Set-Cookie", accessCookie.toString());
