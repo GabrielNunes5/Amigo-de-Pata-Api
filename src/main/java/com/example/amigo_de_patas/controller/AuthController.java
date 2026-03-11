@@ -121,7 +121,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse response) {
 
-        ResponseCookie accessCookie = ResponseCookie.from("access_token", "")
+        ResponseCookie accessCookie = ResponseCookie.from("access_token", "deleted")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -129,7 +129,7 @@ public class AuthController {
                 .sameSite("None")
                 .build();
 
-        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", "")
+        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", "deleted")
                 .httpOnly(true)
                 .secure(true)
                 .path("/api/auth/refresh")
