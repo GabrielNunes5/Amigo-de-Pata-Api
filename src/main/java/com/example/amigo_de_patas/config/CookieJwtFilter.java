@@ -25,16 +25,23 @@ public class CookieJwtFilter extends OncePerRequestFilter {
                 if ("access_token".equals(cookie.getName())) {
 
                     String token = cookie.getValue();
+                    
+                    if ("access_token".equals(cookie.getName())) {
 
-                    request = new HttpServletRequestWrapper(request) {
-                        @Override
-                        public String getHeader(String name) {
-                            if ("Authorization".equals(name)) {
-                                return "Bearer " + token;
+                    String token = cookie.getValue();
+
+                    if (token != null && !token.isBlank() && !"deleted".equals(token)) {
+
+                        request = new HttpServletRequestWrapper(request) {
+                            @Override
+                            public String getHeader(String name) {
+                                if ("Authorization".equalsIgnoreCase(name)) {
+                                    return "Bearer " + token;
+                                }
+                                return super.getHeader(name);
                             }
-                            return super.getHeader(name);
-                        }
-                    };
+                        };
+                    }
                 }
             }
         }
