@@ -17,7 +17,7 @@ public class CookieJwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/api/auth/logout");
+        return path.equals("/api/auth/logout") || path.equals("/api/auth/refresh");
     }
 
     @Override
