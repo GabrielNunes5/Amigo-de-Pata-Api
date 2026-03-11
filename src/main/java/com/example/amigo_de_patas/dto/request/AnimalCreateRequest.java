@@ -43,7 +43,4 @@ public class AnimalCreateRequest {
     @Size(max = 255, message = "A condições devem ter no máximo 255 caracteres")
     private String animalSpecialConditions;
 
-    @NotBlank(message = "A imagem é obrigatória")
-    @Size(max = 255, message = "A URL da imagem deve ter no máximo 255 caracteres")
-    private String animalImageUrl;
 }
