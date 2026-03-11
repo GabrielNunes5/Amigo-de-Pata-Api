@@ -41,8 +41,5 @@ public class AnimalUpdateRequest {
     @Size(max = 255, message = "A condições devem ter no máximo 255 caracteres")
     private String animalSpecialConditions;
 
-    @Size(max = 255, message = "A URL da imagem deve ter no máximo 255 caracteres")
-    private String animalImageUrl;
-
     private Boolean animalAdopted;
 }
