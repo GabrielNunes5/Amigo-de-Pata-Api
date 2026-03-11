@@ -18,15 +18,13 @@ public class CookieJwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("access_token".equals(cookie.getName())) {
 
-                    String token = cookie.getValue();
-                    
-                    if ("access_token".equals(cookie.getName())) {
+            for (Cookie cookie : request.getCookies()) {
+
+                if ("access_token".equals(cookie.getName())) {
 
                     String token = cookie.getValue();
 
@@ -45,6 +43,7 @@ public class CookieJwtFilter extends OncePerRequestFilter {
                 }
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
