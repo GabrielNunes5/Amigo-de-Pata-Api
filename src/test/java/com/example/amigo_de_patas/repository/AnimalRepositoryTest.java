@@ -27,7 +27,6 @@ class AnimalRepositoryTest {
         animal.setAnimalAge("Jovem");
         animal.setAnimalWeight(BigDecimal.valueOf(18.5));
         animal.setAnimalSex("Macho");
-        animal.setAnimalImageUrl("https://exemplo.com/imagem.jpg");
         animalRepository.save(animal);
 
         List<Animal> animals = animalRepository.findAll();
@@ -45,7 +44,6 @@ class AnimalRepositoryTest {
         animal.setAnimalWeight(BigDecimal.valueOf(4.0));
         animal.setAnimalSex("Fêmea");
         animal.setAnimalSpecies("Gato");
-        animal.setAnimalImageUrl("https://exemplo.com/imagem.jpg");
 
         Animal saved = animalRepository.save(animal);
         UUID id = saved.getAnimalId();
