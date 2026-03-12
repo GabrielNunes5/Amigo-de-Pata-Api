@@ -49,8 +49,6 @@ public class Animal {
     @Column
     private String animalSpecialConditions;
 
-    @Column(nullable = false)
-    private String animalImageUrl;
 
     @Column
     private Boolean animalAdopted = false;
