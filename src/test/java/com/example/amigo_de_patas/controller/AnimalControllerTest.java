@@ -58,7 +58,6 @@ class AnimalControllerTest {
         createRequest.setAnimalWeight(BigDecimal.valueOf(2.0));
         createRequest.setAnimalSex("Macho");
         createRequest.setAnimalSpecies("Cachorro");
-        createRequest.setAnimalImageUrl("http://example.com/images/bidu.jpg");
 
         response = new AnimalResponse();
         response.setAnimalId(id);
@@ -66,7 +65,6 @@ class AnimalControllerTest {
         response.setAnimalAge("Jovem");
         response.setAnimalWeight(BigDecimal.valueOf(2.0));
         response.setAnimalSex("Macho");
-        response.setAnimalImageUrl("http://example.com/images/bidu.jpg");
     }
 
     @Test
