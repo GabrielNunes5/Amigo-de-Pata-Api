@@ -11,6 +11,7 @@ import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.repository.AdopterRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,16 @@ import java.util.UUID;
 public class AdopterService {
     private final AdopterRepository adopterRepository;
     private final AdopterMapper adopterMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private boolean isAdult(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears() >= 18;
     }
 
-    public AdopterService(AdopterRepository adopterRepository, AdopterMapper adopterMapper) {
+    public AdopterService(AdopterRepository adopterRepository, AdopterMapper adopterMapper, PasswordEncoder passwordEncoder) {
         this.adopterRepository = adopterRepository;
         this.adopterMapper = adopterMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -73,6 +76,11 @@ public class AdopterService {
         adopterMapper.updateAdopterFromDto(req, entity);
         Adopter updated = adopterRepository.save(entity);
         return adopterMapper.toResponse(updated);
+    }
+
+    public void updateAdopterPassword(Adopter adopter, String password){
+        adopter.setAdopterPassword(passwordEncoder.encode(password));
+        adopterRepository.save(adopter);
     }
 
     @Transactional

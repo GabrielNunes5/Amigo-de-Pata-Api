@@ -2,11 +2,14 @@ package com.example.amigo_de_patas.controller;
 
 import com.example.amigo_de_patas.dto.request.AdopterCreateRequest;
 import com.example.amigo_de_patas.dto.request.AuthCreateRequest;
+import com.example.amigo_de_patas.dto.request.ForgotPasswordRequest;
+import com.example.amigo_de_patas.dto.request.ResetPasswordRequest;
 import com.example.amigo_de_patas.dto.response.AdopterResponse;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
 import com.example.amigo_de_patas.service.AdopterService;
 import com.example.amigo_de_patas.service.AuthService;
+import com.example.amigo_de_patas.service.PasswordResetTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,10 +29,12 @@ public class AuthController {
 
     private final AuthService authService;
     private final AdopterService adopterService;
+    private final PasswordResetTokenService passwordResetTokenService;
 
-    public AuthController(AuthService authService, AdopterService adopterService) {
+    public AuthController(AuthService authService, AdopterService adopterService, PasswordResetTokenService passwordResetTokenService) {
         this.authService = authService;
         this.adopterService = adopterService;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     private void addAuthCookies(HttpServletResponse response, AuthResponse auth) {
@@ -140,6 +145,20 @@ public class AuthController {
         response.addHeader("Set-Cookie", accessCookie.toString());
         response.addHeader("Set-Cookie", refreshCookie.toString());
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotpassword(@RequestBody @Valid ForgotPasswordRequest request){
+        passwordResetTokenService.forgotPassword(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(
+            @RequestBody @Valid ResetPasswordRequest request,
+            @RequestParam String resetToken){
+        passwordResetTokenService.resetPassword(request, resetToken);
         return ResponseEntity.ok().build();
     }
 }
