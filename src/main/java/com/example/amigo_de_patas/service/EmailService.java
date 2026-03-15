@@ -14,6 +14,9 @@ public class EmailService {
     @Value("${app.base-url}")
     private String baseUrl;
 
+    @Value("${brevo.from.email}")
+    private String fromEmail;
+
     public EmailService(JavaMailSender mailSender, PasswordResetTokenRepository passwordResetTokenRepository) {
         this.mailSender = mailSender;
     }
@@ -23,6 +26,7 @@ public class EmailService {
         String body = "Clique no link abaixo para alterar sua senha.\n" + resetUrl;
 
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
         message.setTo(email);
         message.setSubject("Password Reset");
         message.setText(body);
