@@ -25,7 +25,7 @@ public class EmailService {
     private String baseUrl;
 
     public void sendPasswordResetEmail(String email, String resetToken) {
-        String resetUrl = baseUrl + "reset-password?token=" + resetToken;
+        String resetUrl = baseUrl + "auth/reset-password?token=" + resetToken;
         String body = "Clique no link abaixo para alterar sua senha:\n" + resetUrl;
 
         ApiClient defaultClient = Configuration.getDefaultApiClient();
