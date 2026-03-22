@@ -72,13 +72,21 @@ public class AuthController {
         return null;
     }
 
+    private String getClientIp(HttpServletRequest request) {
+        String forwardedFor = request.getHeader("X-Forwarded-For");
+        if (forwardedFor != null && !forwardedFor.isEmpty()) {
+            return forwardedFor.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Void> login(
             @RequestBody @Valid AuthCreateRequest request,
             HttpServletResponse response,
             HttpServletRequest httpRequest) {
 
-        String ip = httpRequest.getRemoteAddr();
+        String ip = getClientIp(httpRequest);
 
         AuthResponse authResponse = authService.login(request, ip);
 
