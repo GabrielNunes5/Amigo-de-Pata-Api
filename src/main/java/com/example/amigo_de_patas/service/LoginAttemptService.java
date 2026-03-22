@@ -27,14 +27,20 @@ public class LoginAttemptService {
     }
 
     public void registerFailedAttempt(String ip) {
+        System.out.println(">>> registerFailedAttempt chamado para IP: " + ip);
+        System.out.println(">>> attempts antes: " + attempts);
+
         if (!attempts.containsKey(ip)) {
             attempts.put(ip, 1);
         } else {
             attempts.put(ip, attempts.get(ip) + 1);
         }
 
+        System.out.println(">>> attempts depois: " + attempts);
+
         if (attempts.get(ip) == 5) {
             blockedUntil.put(ip, LocalDateTime.now().plusMinutes(30));
+            System.out.println(">>> IP BLOQUEADO: " + ip);
         }
     }
 
