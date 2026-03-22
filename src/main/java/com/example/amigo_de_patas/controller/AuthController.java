@@ -73,10 +73,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid AuthCreateRequest request,
-                                      HttpServletResponse response) {
+    public ResponseEntity<Void> login(
+            @RequestBody @Valid AuthCreateRequest request,
+            HttpServletResponse response,
+            HttpServletRequest httpRequest) {
 
-        AuthResponse authResponse = authService.login(request);
+        String ip = httpRequest.getRemoteAddr();
+
+        AuthResponse authResponse = authService.login(request, ip);
 
         addAuthCookies(response, authResponse);
 

@@ -5,6 +5,7 @@ import com.example.amigo_de_patas.dto.request.AuthCreateRequest;
 import com.example.amigo_de_patas.dto.response.AuthResponse;
 import com.example.amigo_de_patas.exceptions.BadRequestException;
 import com.example.amigo_de_patas.exceptions.ConflictException;
+import com.example.amigo_de_patas.exceptions.TooManyRequestsException;
 import com.example.amigo_de_patas.exceptions.UnauthorizedException;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.model.Role;
@@ -25,15 +26,17 @@ public class AuthService implements UserDetailsService {
     private final AdopterRepository adopterRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final LoginAttemptService loginAttemptService;
 
     private boolean isAdult(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears() >= 18;
     }
 
-    public AuthService(AdopterRepository adopterRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(AdopterRepository adopterRepository, PasswordEncoder passwordEncoder, JwtService jwtService, LoginAttemptService loginAttemptService) {
         this.adopterRepository = adopterRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
@@ -43,17 +46,27 @@ public class AuthService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
-    public AuthResponse login(AuthCreateRequest request) {
+    public AuthResponse login(AuthCreateRequest request, String ip) {
+
+        if (loginAttemptService.isBlocked(ip)){
+            throw new TooManyRequestsException("Atingiu o limite de tentativas. Tente novamente em breve");
+        }
 
         var adopter = adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail())
-                .orElseThrow(() -> new UnauthorizedException("Credenciais inválidas"));
+                .orElseThrow(() -> {
+                    loginAttemptService.registerFailedAttempt(ip);
+                    return new UnauthorizedException("Credenciais inválidas");
+                });
 
         if (!passwordEncoder.matches(request.getAdopterPassword(), adopter.getPassword())) {
+            loginAttemptService.registerFailedAttempt(ip);
             throw new UnauthorizedException("Credenciais inválidas");
         }
 
         String accessToken = jwtService.generateAccessToken(adopter);
         String refreshToken = jwtService.generateRefreshToken(adopter);
+
+        loginAttemptService.resetAttempt(ip);
 
         return new AuthResponse(
                 accessToken,
