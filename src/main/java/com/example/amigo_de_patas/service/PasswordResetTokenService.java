@@ -3,6 +3,7 @@ package com.example.amigo_de_patas.service;
 import com.example.amigo_de_patas.dto.request.ForgotPasswordRequest;
 import com.example.amigo_de_patas.dto.request.ResetPasswordRequest;
 import com.example.amigo_de_patas.exceptions.BadRequestException;
+import com.example.amigo_de_patas.exceptions.TooManyRequestsException;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.model.PasswordResetToken;
 import com.example.amigo_de_patas.repository.AdopterRepository;
@@ -25,12 +26,14 @@ public class PasswordResetTokenService {
 
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
+    private final AttemptsService attemptsService;
 
-    public PasswordResetTokenService(PasswordResetTokenRepository passwordResetTokenRepository, AdopterRepository adopterRepository, EmailService emailService, AdopterService adopterService) {
+    public PasswordResetTokenService(PasswordResetTokenRepository passwordResetTokenRepository, AdopterRepository adopterRepository, EmailService emailService, AdopterService adopterService, AttemptsService attemptsService) {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.adopterRepository = adopterRepository;
         this.emailService = emailService;
         this.adopterService = adopterService;
+        this.attemptsService = attemptsService;
     }
 
     private String makeResetToken(){
@@ -40,7 +43,13 @@ public class PasswordResetTokenService {
     }
 
     @Transactional
-    public void forgotPassword(ForgotPasswordRequest request) {
+    public void forgotPassword(ForgotPasswordRequest request, String ip) {
+        if (attemptsService.isBlocked(ip)){
+            throw new TooManyRequestsException("Atingiu o limite de tentativas. Tente novamente em breve");
+        }
+
+        attemptsService.registerAttempt(ip);
+
         adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail())
                 .ifPresent(adopter -> {
                     List<PasswordResetToken> resetTokens = passwordResetTokenRepository.findByAdopter(adopter);

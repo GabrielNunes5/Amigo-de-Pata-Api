@@ -161,8 +161,13 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Void> forgotpassword(@RequestBody @Valid ForgotPasswordRequest request){
-        passwordResetTokenService.forgotPassword(request);
+    public ResponseEntity<Void> forgotpassword(
+            @RequestBody @Valid ForgotPasswordRequest request,
+            HttpServletRequest httpRequest){
+
+        String ip = getClientIp(httpRequest);
+        passwordResetTokenService.forgotPassword(request,ip);
+
         return ResponseEntity.ok().build();
     }
 

@@ -26,17 +26,17 @@ public class AuthService implements UserDetailsService {
     private final AdopterRepository adopterRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final LoginAttemptService loginAttemptService;
+    private final AttemptsService attemptsService;
 
     private boolean isAdult(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears() >= 18;
     }
 
-    public AuthService(AdopterRepository adopterRepository, PasswordEncoder passwordEncoder, JwtService jwtService, LoginAttemptService loginAttemptService) {
+    public AuthService(AdopterRepository adopterRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AttemptsService attemptsService) {
         this.adopterRepository = adopterRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.loginAttemptService = loginAttemptService;
+        this.attemptsService = attemptsService;
     }
 
     @Override
@@ -48,25 +48,25 @@ public class AuthService implements UserDetailsService {
 
     public AuthResponse login(AuthCreateRequest request, String ip) {
 
-        if (loginAttemptService.isBlocked(ip)){
+        if (attemptsService.isBlocked(ip)){
             throw new TooManyRequestsException("Atingiu o limite de tentativas. Tente novamente em breve");
         }
 
         var adopter = adopterRepository.findAdopterByAdopterEmail(request.getAdopterEmail())
                 .orElseThrow(() -> {
-                    loginAttemptService.registerFailedAttempt(ip);
+                    attemptsService.registerAttempt(ip);
                     return new UnauthorizedException("Credenciais inválidas");
                 });
 
         if (!passwordEncoder.matches(request.getAdopterPassword(), adopter.getPassword())) {
-            loginAttemptService.registerFailedAttempt(ip);
+            attemptsService.registerAttempt(ip);
             throw new UnauthorizedException("Credenciais inválidas");
         }
 
         String accessToken = jwtService.generateAccessToken(adopter);
         String refreshToken = jwtService.generateRefreshToken(adopter);
 
-        loginAttemptService.resetAttempt(ip);
+        attemptsService.resetAttempt(ip);
 
         return new AuthResponse(
                 accessToken,

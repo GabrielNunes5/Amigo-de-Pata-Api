@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class LoginAttemptService {
+public class AttemptsService {
 
     Map<String, Integer> attempts = new ConcurrentHashMap<>();
     Map<String, LocalDateTime> blockedUntil = new ConcurrentHashMap<>();
@@ -26,7 +26,7 @@ public class LoginAttemptService {
         return true;
     }
 
-    public void registerFailedAttempt(String ip) {
+    public void registerAttempt(String ip) {
         if (!attempts.containsKey(ip)) {
             attempts.put(ip, 1);
         } else {
