@@ -34,6 +34,10 @@ public class AdoptionForm {
     @Column()
     private String message;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.PENDING;
+
     @CreationTimestamp
     private Timestamp createdAt;
 

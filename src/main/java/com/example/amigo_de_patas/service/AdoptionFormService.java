@@ -1,12 +1,14 @@
 package com.example.amigo_de_patas.service;
 
 import com.example.amigo_de_patas.dto.request.AdoptionFormCreateRequest;
+import com.example.amigo_de_patas.dto.request.StatusUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AdoptionFormResponse;
 import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
 import com.example.amigo_de_patas.mapper.AdoptionFormMapper;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.model.AdoptionForm;
 import com.example.amigo_de_patas.model.Animal;
+import com.example.amigo_de_patas.model.Status;
 import com.example.amigo_de_patas.repository.AdopterRepository;
 import com.example.amigo_de_patas.repository.AdoptionFormRepository;
 import com.example.amigo_de_patas.repository.AnimalRepository;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -89,6 +92,28 @@ public class AdoptionFormService {
         }
         return adoptionFormRepository.findAllByAnimal_AnimalId(animalId, pageable)
                 .map(adoptionFormMapper::toResponse);
+    }
+
+    @Transactional
+    public AdoptionFormResponse updateAdoptionFormStatus(UUID id, StatusUpdateRequest request){
+        AdoptionForm entity = adoptionFormRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Formulario Não encontrado"));
+        entity.setStatus(request.getStatus());
+
+
+        if (request.getStatus() == Status.APPROVED){
+            Animal animal = entity.getAnimal();
+            animal.setAnimalAdopted(true);
+            animal.setAdopter(entity.getAdopter());
+            animalRepository.save(animal);
+
+            List<AdoptionForm> pendingForms = adoptionFormRepository
+                    .findAllByAnimal_AnimalIdAndStatus(animal.getAnimalId(), Status.PENDING);
+            pendingForms.forEach(form -> form.setStatus(Status.REJECTED));
+            adoptionFormRepository.saveAll(pendingForms);
+        }
+
+        return adoptionFormMapper.toResponse(adoptionFormRepository.save(entity));
     }
 }
 

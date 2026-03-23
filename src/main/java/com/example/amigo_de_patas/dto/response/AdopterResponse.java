@@ -1,6 +1,5 @@
 package com.example.amigo_de_patas.dto.response;
 
-import com.example.amigo_de_patas.model.Animal;
 import com.example.amigo_de_patas.model.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,7 @@ public class AdopterResponse {
     private String typeHouse;
     private Boolean hasGarden;
     private Role role;
-    private List<Animal> adoptedAnimals;
+    private List<AdoptedAnimalResponse> adoptedAnimals;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

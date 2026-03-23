@@ -15,6 +15,8 @@ public interface AnimalMapper {
     Animal toEntity(AnimalCreateRequest dto);
 
     @Mapping(target = "animalImages", source = "animalImages")
+    @Mapping(target = "adopterId", source = "adopter.adopterId")
+    @Mapping(target = "adopterName", source = "adopter.adopterFullName")
     AnimalResponse toResponse(Animal entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

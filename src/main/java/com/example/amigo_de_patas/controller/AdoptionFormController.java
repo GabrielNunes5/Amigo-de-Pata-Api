@@ -2,6 +2,7 @@ package com.example.amigo_de_patas.controller;
 
 
 import com.example.amigo_de_patas.dto.request.AdoptionFormCreateRequest;
+import com.example.amigo_de_patas.dto.request.StatusUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AdoptionFormResponse;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.service.AdoptionFormService;
@@ -63,5 +64,14 @@ public class AdoptionFormController {
     public ResponseEntity<ApiResponse<Page<AdoptionFormResponse>>> getAdoptionFormsByAnimal(@PathVariable UUID animalId, Pageable pageable){
         Page<AdoptionFormResponse> responseList = adoptionFormService.getAdoptionFormByAnimalId(animalId, pageable);
         return ResponseEntity.ok(new ApiResponse<>(responseList));
+    }
+
+    @PatchMapping("/{adoptionFormId}/status")
+    public ResponseEntity<ApiResponse<AdoptionFormResponse>> updateAdoptionFormStatus(
+            @PathVariable UUID adoptionFormId,
+            @RequestBody @Valid StatusUpdateRequest request
+    ) {
+        AdoptionFormResponse response = adoptionFormService.updateAdoptionFormStatus(adoptionFormId, request);
+        return ResponseEntity.ok(new ApiResponse<>(response));
     }
 }

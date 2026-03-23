@@ -24,9 +24,10 @@ public class AnimalResponse {
     private String animalSize;
     private Boolean animalNeutered;
     private String animalSpecialConditions;
-    private String animalImageUrl;
     private List<String> animalImages;
     private Boolean animalAdopted;
+    private UUID adopterId;
+    private String adopterName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
