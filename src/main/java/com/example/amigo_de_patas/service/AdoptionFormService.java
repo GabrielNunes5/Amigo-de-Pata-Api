@@ -3,6 +3,7 @@ package com.example.amigo_de_patas.service;
 import com.example.amigo_de_patas.dto.request.AdoptionFormCreateRequest;
 import com.example.amigo_de_patas.dto.request.StatusUpdateRequest;
 import com.example.amigo_de_patas.dto.response.AdoptionFormResponse;
+import com.example.amigo_de_patas.exceptions.BadRequestException;
 import com.example.amigo_de_patas.exceptions.ResourceNotFoundException;
 import com.example.amigo_de_patas.mapper.AdoptionFormMapper;
 import com.example.amigo_de_patas.model.Adopter;
@@ -92,6 +93,18 @@ public class AdoptionFormService {
         }
         return adoptionFormRepository.findAllByAnimal_AnimalId(animalId, pageable)
                 .map(adoptionFormMapper::toResponse);
+    }
+
+    @Transactional
+    public void deleteAdoptionFormById(UUID id){
+        AdoptionForm entity = adoptionFormRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Formulario Não encontrado"));
+
+        if(entity.getStatus() == Status.APPROVED){
+            throw new BadRequestException("Não é possivel deletar o formulario já aprovado");
+        }
+
+        adoptionFormRepository.deleteById(id);
     }
 
     @Transactional

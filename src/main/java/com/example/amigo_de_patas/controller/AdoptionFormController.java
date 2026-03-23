@@ -66,6 +66,12 @@ public class AdoptionFormController {
         return ResponseEntity.ok(new ApiResponse<>(responseList));
     }
 
+    @DeleteMapping("/{adoptionFormId}")
+    public ResponseEntity<Void> deleteAdoptionForm(@PathVariable UUID adoptionFormId){
+        adoptionFormService.deleteAdoptionFormById(adoptionFormId);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{adoptionFormId}/status")
     public ResponseEntity<ApiResponse<AdoptionFormResponse>> updateAdoptionFormStatus(
             @PathVariable UUID adoptionFormId,
