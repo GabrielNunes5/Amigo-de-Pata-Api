@@ -1,5 +1,6 @@
 package com.example.amigo_de_patas.controller;
 
+import com.example.amigo_de_patas.dto.request.StatusUpdateRequest;
 import com.example.amigo_de_patas.dto.request.VoluntaryCreateRequest;
 import com.example.amigo_de_patas.dto.response.ApiResponse;
 import com.example.amigo_de_patas.dto.response.VoluntaryResponse;
@@ -44,5 +45,14 @@ public class VoluntaryController {
     public ResponseEntity<Void> deleteVoluntary(@PathVariable UUID voluntaryId){
         voluntaryService.deleteVoluntary(voluntaryId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{voluntaryId}/status")
+    public ResponseEntity<ApiResponse<VoluntaryResponse>> updateVoluntaryStatus(
+            @PathVariable UUID voluntaryId,
+            @RequestBody @Valid StatusUpdateRequest request){
+
+        VoluntaryResponse response = voluntaryService.updateVoluntaryStatus(voluntaryId, request);
+        return ResponseEntity.ok(new ApiResponse<>(response));
     }
 }

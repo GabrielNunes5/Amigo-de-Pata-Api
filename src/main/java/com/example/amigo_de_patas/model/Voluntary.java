@@ -62,6 +62,10 @@ public class Voluntary {
     @Column()
     private String voluntarySpecialSkills;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status voluntaryStatus = Status.PENDING;
+
     @CreationTimestamp
     private Timestamp createdAt;
 

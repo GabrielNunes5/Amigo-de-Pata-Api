@@ -1,5 +1,6 @@
 package com.example.amigo_de_patas.dto.response;
 
+import com.example.amigo_de_patas.model.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class VoluntaryResponse {
     private Boolean hasRescueExperience;
     private Boolean canWorkOnWeekends;
     private String voluntarySpecialSkills;
+    private Status voluntaryStatus;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
 }

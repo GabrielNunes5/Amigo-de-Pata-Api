@@ -1,5 +1,6 @@
 package com.example.amigo_de_patas.service;
 
+import com.example.amigo_de_patas.dto.request.StatusUpdateRequest;
 import com.example.amigo_de_patas.dto.request.VoluntaryCreateRequest;
 import com.example.amigo_de_patas.dto.response.VoluntaryResponse;
 import com.example.amigo_de_patas.exceptions.BadRequestException;
@@ -67,5 +68,14 @@ public class VoluntaryService {
             throw new ResourceNotFoundException("Voluntario não encontrado");
         }
         voluntaryRepository.deleteById(id);
+    }
+
+    @Transactional
+    public VoluntaryResponse updateVoluntaryStatus(UUID uuid, StatusUpdateRequest request) {
+        Voluntary voluntary = voluntaryRepository.findById(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Voluntario não encontrado"));
+
+        voluntary.setVoluntaryStatus(request.getStatus());
+        return voluntaryMapper.toResponse(voluntaryRepository.save(voluntary));
     }
 }
