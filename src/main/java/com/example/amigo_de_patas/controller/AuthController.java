@@ -50,7 +50,7 @@ public class AuthController {
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", auth.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/auth/refresh")
+                .path("/")
                 .maxAge(604800)
                 .sameSite("None")
                 .build();
@@ -149,7 +149,7 @@ public class AuthController {
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", "deleted")
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/auth/refresh")
+                .path("/")
                 .maxAge(0)
                 .sameSite("None")
                 .build();
