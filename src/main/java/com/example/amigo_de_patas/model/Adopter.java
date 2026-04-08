@@ -57,6 +57,9 @@ public class Adopter implements UserDetails {
     private Role role = Role.USER;
 
     @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AdoptionForm> adoptionForms;
+
+    @OneToMany(mappedBy = "adopter", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Animal> adoptedAnimals;
 
     @CreationTimestamp

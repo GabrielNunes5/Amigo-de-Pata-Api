@@ -11,11 +11,9 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdoptionFormResponse {
+public class AdopterAdoptionFormResponse {
 
     private UUID adoptionFormId;
-    private UUID adopterId;
-    private String adopterName;
     private UUID animalId;
     private String animalName;
     private String experience;

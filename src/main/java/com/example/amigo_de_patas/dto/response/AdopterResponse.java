@@ -25,6 +25,7 @@ public class AdopterResponse {
     private String typeHouse;
     private Boolean hasGarden;
     private Role role;
+    private List<AdopterAdoptionFormResponse> adoptionForms;
     private List<AdoptedAnimalResponse> adoptedAnimals;
     private Timestamp createdAt;
     private Timestamp updatedAt;

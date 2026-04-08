@@ -1,6 +1,7 @@
 package com.example.amigo_de_patas.mapper;
 
 import com.example.amigo_de_patas.dto.request.AdoptionFormCreateRequest;
+import com.example.amigo_de_patas.dto.response.AdopterAdoptionFormResponse;
 import com.example.amigo_de_patas.dto.response.AdoptionFormResponse;
 import com.example.amigo_de_patas.model.Adopter;
 import com.example.amigo_de_patas.model.AdoptionForm;
@@ -18,11 +19,14 @@ public interface AdoptionFormMapper {
     @Mapping(target = "updatedAt", ignore = true)
     AdoptionForm toEntity(AdoptionFormCreateRequest dto, Adopter adopter, Animal animal);
 
-    @Mapping(target = "formId", source = "adoptionFormId")
     @Mapping(target = "adopterId", source = "adopter.adopterId")
     @Mapping(target = "adopterName", source = "adopter.adopterFullName")
     @Mapping(target = "animalId", source = "animal.animalId")
     @Mapping(target = "animalName", source = "animal.animalName")
     @Mapping(target = "createdAt", source = "createdAt")
     AdoptionFormResponse toResponse(AdoptionForm entity);
+
+    @Mapping(target = "animalId", source = "animal.animalId")
+    @Mapping(target = "animalName", source = "animal.animalName")
+    AdopterAdoptionFormResponse toAdopterResponse(AdoptionForm entity);
 }
