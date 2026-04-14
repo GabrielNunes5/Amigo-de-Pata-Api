@@ -14,6 +14,7 @@ public class AdoptedAnimalResponse {
     private UUID animalId;
     private String animalName;
     private String animalSpecies;
+    private String animalSize;
     private String animalAge;
     private Boolean animalAdopted;
     private List<String> animalImages;
